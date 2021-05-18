@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31229.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenLibrary", "CodeGenLibrary\CodeGenLibrary.csproj", "{5AA1F27C-2685-4C95-B61B-740B091F9812}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{29FE388C-AD37-4648-84A8-FE249D2E947F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenLibrary.Tests", "CodeGenLibrary.Tests\CodeGenLibrary.Tests.csproj", "{AFDA517B-0D57-494A-8964-A6625BECDE88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{DE7BEC9C-7238-4F54-8010-6C76BA63E7C5}"
+	ProjectSection(SolutionItems) = preProject
+		..\devblogs.microsoft.com.url = ..\devblogs.microsoft.com.url
+		..\roslyn-sdk-README.md at main · dotnet-roslyn-sdk.url = ..\roslyn-sdk-README.md at main · dotnet-roslyn-sdk.url
+		..\source-generators.cookbook.md.url = ..\source-generators.cookbook.md.url
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AA1F27C-2685-4C95-B61B-740B091F9812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AA1F27C-2685-4C95-B61B-740B091F9812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AA1F27C-2685-4C95-B61B-740B091F9812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AA1F27C-2685-4C95-B61B-740B091F9812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29FE388C-AD37-4648-84A8-FE249D2E947F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29FE388C-AD37-4648-84A8-FE249D2E947F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29FE388C-AD37-4648-84A8-FE249D2E947F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29FE388C-AD37-4648-84A8-FE249D2E947F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDA517B-0D57-494A-8964-A6625BECDE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDA517B-0D57-494A-8964-A6625BECDE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDA517B-0D57-494A-8964-A6625BECDE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDA517B-0D57-494A-8964-A6625BECDE88}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC7F6FCD-140B-426A-B950-E8DC83F73F05}
+	EndGlobalSection
+EndGlobal
