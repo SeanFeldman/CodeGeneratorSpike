@@ -11,12 +11,12 @@ namespace CodeGenLibrary
         public void Initialize(GeneratorInitializationContext context)
         {
             Debug.WriteLine("Initialize code generator");
-#if DEBUG
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
-#endif
+            // #if DEBUG
+            //             if (!Debugger.IsAttached)
+            //             {
+            //                 Debugger.Launch();
+            //             }
+            // #endif
         }
 
         public void Execute(GeneratorExecutionContext context)
