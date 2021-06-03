@@ -9,14 +9,14 @@ namespace CodeGenLibrary
     [Generator]
     public class FunctionEndpointTriggerGenerator : ISourceGenerator
     {
-        private const string attributeSource = @"
-        [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
-        sealed class NServiceBusEndpointNameAttribute : System.Attribute
-        {
-            public string Name { get; }
-            public NServiceBusEndpointNameAttribute(string name) => Name = name;
-        }
-    ";
+        private const string attributeSource = @"// Auto-generated class to provide the queue name to the auto-generated NServiceBus trigger function
+[System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
+sealed class NServiceBusEndpointNameAttribute : System.Attribute
+{
+    public string Name { get; }
+    public NServiceBusEndpointNameAttribute(string name) => Name = name;
+}
+";
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -54,7 +54,7 @@ namespace CodeGenLibrary
             var rx = (SyntaxReceiver)context.SyntaxContextReceiver!;
             foreach (var name in rx!.Names)
             {
-                var source = $@"
+                var source = $@"// Auto-generated class serving as a trigger function for NServiceBus
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
