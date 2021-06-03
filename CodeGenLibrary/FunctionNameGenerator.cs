@@ -10,13 +10,13 @@ namespace CodeGenLibrary
     public class FunctionNameGenerator : ISourceGenerator
     {
         private const string attributeSource = @"
-    [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
-    internal sealed class FunctionNameAttribute: System.Attribute
-    {
-        public string Name { get; }
-        public FunctionNameAttribute(string name) => Name = name;
-    }
-";
+        [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
+        sealed class NServiceBusEndpointNameAttribute : System.Attribute
+        {
+            public string Name { get; }
+            public NServiceBusEndpointNameAttribute(string name) => Name = name;
+        }
+    ";
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -26,7 +26,9 @@ namespace CodeGenLibrary
             //                 Debugger.Launch();
             //             }
             // #endif
-            context.RegisterForPostInitialization(pi => pi.AddSource("FunctionName_MainAttributes__", attributeSource));
+
+            context.RegisterForPostInitialization(pi => pi.AddSource("NServiceBus__NServiceBusEndpointNameAttribute", attributeSource));
+
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
@@ -39,7 +41,7 @@ namespace CodeGenLibrary
                 // find all valid attributes
                 if (context.Node is AttributeSyntax attributeSyntax
                     && attributeSyntax.ArgumentList?.Arguments.Count == 1
-                    && context.SemanticModel.GetTypeInfo(attributeSyntax).Type?.ToDisplayString() == "FunctionNameAttribute")
+                    && context.SemanticModel.GetTypeInfo(attributeSyntax).Type?.ToDisplayString() == "NServiceBusEndpointNameAttribute")
                 {
                     var name = context.SemanticModel.GetConstantValue(attributeSyntax.ArgumentList.Arguments[0].Expression).ToString();
                     Names.Add(name);
@@ -49,18 +51,16 @@ namespace CodeGenLibrary
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var rx = (SyntaxReceiver)context.SyntaxReceiver!;
+            var rx = (SyntaxReceiver)context.SyntaxContextReceiver!;
             foreach (var name in rx!.Names)
             {
                 var source =
-                    $@"
-namespace FunctionName {{
-    public static partial class Endpoint {{
-        public const string Name = {name}"";
-    }}
+$@"
+public partial class FunctionEndpointTrigger {{
+        public const string Name = ""{name}"";
 }}
 ";
-                context.AddSource($"FunctionName{name}", SourceText.From(source, Encoding.UTF8));
+                context.AddSource("NServiceBus__FunctionEndpointTrigger", SourceText.From(source, Encoding.UTF8));
             }
         }
     }
