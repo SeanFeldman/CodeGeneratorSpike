@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace CodeGenLibrary
 {
     [Generator]
-    public class FunctionNameGenerator : ISourceGenerator
+    public class FunctionEndpointTriggerGenerator : ISourceGenerator
     {
         private const string attributeSource = @"
         [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
@@ -54,10 +54,31 @@ namespace CodeGenLibrary
             var rx = (SyntaxReceiver)context.SyntaxContextReceiver!;
             foreach (var name in rx!.Names)
             {
-                var source =
-$@"
-public partial class FunctionEndpointTrigger {{
-        public const string Name = ""{name}"";
+                var source = $@"
+using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using NServiceBus;
+
+class FunctionEndpointTrigger
+{{
+    readonly IFunctionEndpoint endpoint;
+
+    public FunctionEndpointTrigger(IFunctionEndpoint endpoint)
+    {{
+        this.endpoint = endpoint;
+    }}
+
+    [FunctionName(""NServiceBusFunctionEndpointTrigger"")]
+    public async Task Run(
+        [ServiceBusTrigger(queueName: ""{name}"")]
+        Message message,
+        ILogger logger,
+        ExecutionContext executionContext)
+    {{
+        await endpoint.Process(message, executionContext, logger);
+    }}
 }}
 ";
                 context.AddSource("NServiceBus__FunctionEndpointTrigger", SourceText.From(source, Encoding.UTF8));
