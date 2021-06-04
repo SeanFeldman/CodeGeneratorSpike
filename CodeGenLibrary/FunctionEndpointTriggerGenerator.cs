@@ -27,12 +27,16 @@ sealed class NServiceBusEndpointNameAttribute : System.Attribute
 
         public void Initialize(GeneratorInitializationContext context)
         {
+            #region Use to debug from consuming code in VS but don't develop with this, rather use tests
+
             // #if DEBUG
             //             if (!Debugger.IsAttached)
             //             {
             //                 Debugger.Launch();
             //             }
             // #endif
+
+            #endregion
 
             context.RegisterForPostInitialization(pi => pi.AddSource("NServiceBus__NServiceBusEndpointNameAttribute", attributeSource));
 
