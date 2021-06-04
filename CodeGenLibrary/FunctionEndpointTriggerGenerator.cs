@@ -14,6 +14,10 @@ namespace CodeGenLibrary
 sealed class NServiceBusEndpointNameAttribute : System.Attribute
 {
     public string Name { get; }
+    ///<summary>
+    ///Endpoint logical name.
+    ///</summary>
+    ///<param name=""name"">Endpoint name that is the input queue name.</param>
     public NServiceBusEndpointNameAttribute(string name) => Name = name;
 }
 ";
