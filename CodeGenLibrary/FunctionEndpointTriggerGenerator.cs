@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -10,6 +9,10 @@ namespace CodeGenLibrary
     public class FunctionEndpointTriggerGenerator : ISourceGenerator
     {
         private const string attributeSource = @"// Auto-generated class to provide the queue name to the auto-generated NServiceBus trigger function
+///<summary>
+///Assembly attribute to specify NServiceBus logical endpoint name.
+///This name is used to wire-up an auto-generated service bus trigger function, responding to messages in the queue specified by the name provided.
+///</summary>
 [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple=false)]
 sealed class NServiceBusEndpointNameAttribute : System.Attribute
 {
@@ -38,7 +41,7 @@ sealed class NServiceBusEndpointNameAttribute : System.Attribute
 
         class SyntaxReceiver : ISyntaxContextReceiver
         {
-            public readonly List<string> Names = new();
+            internal string EndpointName;
 
             public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
             {
@@ -47,18 +50,17 @@ sealed class NServiceBusEndpointNameAttribute : System.Attribute
                     && attributeSyntax.ArgumentList?.Arguments.Count == 1
                     && context.SemanticModel.GetTypeInfo(attributeSyntax).Type?.ToDisplayString() == "NServiceBusEndpointNameAttribute")
                 {
-                    var name = context.SemanticModel.GetConstantValue(attributeSyntax.ArgumentList.Arguments[0].Expression).ToString();
-                    Names.Add(name);
+                    EndpointName = context.SemanticModel.GetConstantValue(attributeSyntax.ArgumentList.Arguments[0].Expression).ToString();
                 }
             }
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var rx = (SyntaxReceiver)context.SyntaxContextReceiver!;
-            foreach (var name in rx!.Names)
-            {
-                var source = $@"// Auto-generated class serving as a trigger function for NServiceBus
+            var syntaxReceiver = (SyntaxReceiver)context.SyntaxContextReceiver!;
+
+            var source =
+$@"// Auto-generated class serving as a trigger function for NServiceBus
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -76,7 +78,7 @@ class FunctionEndpointTrigger
 
     [FunctionName(""NServiceBusFunctionEndpointTrigger"")]
     public async Task Run(
-        [ServiceBusTrigger(queueName: ""{name}"")]
+        [ServiceBusTrigger(queueName: ""{syntaxReceiver!.EndpointName}"")]
         Message message,
         ILogger logger,
         ExecutionContext executionContext)
@@ -85,8 +87,7 @@ class FunctionEndpointTrigger
     }}
 }}
 ";
-                context.AddSource("NServiceBus__FunctionEndpointTrigger", SourceText.From(source, Encoding.UTF8));
-            }
+            context.AddSource("NServiceBus__FunctionEndpointTrigger", SourceText.From(source, Encoding.UTF8));
         }
     }
 }
