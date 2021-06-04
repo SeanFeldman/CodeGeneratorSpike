@@ -84,7 +84,7 @@ class FunctionEndpointTrigger
         this.endpoint = endpoint;
     }}
 
-    [FunctionName(""NServiceBusFunctionEndpointTrigger"")]
+    [FunctionName(""NServiceBusFunctionEndpointTrigger-{syntaxReceiver.EndpointName}"")]
     public async Task Run(
         [ServiceBusTrigger(queueName: ""{syntaxReceiver.EndpointName}"")]
         Message message,
